@@ -17,8 +17,10 @@ SwiftUI ile geliştirilmiş bu uygulama, PDF / DOCX / TXT dosyalarını okur , b
 - MVVM benzeri modüler yapı
 
 ## Ekran Görüntüsü
-![mobil resim](screenshot1.png)
-![mobil resim2](screenshot2.png)
+![mobil resim](screenshot1.png)<img src="screenshot1.png" width="500" alt="Ana ekran">
+
+![mobil resim2](screenshot2.png)<img src="screenshot1.png" width="500" alt="Ana ekran">
+
 
 ##  Dosya Yapısı
 AnswerFileApp.swift # Uygulama başlatıcısı
