@@ -66,9 +66,9 @@ func readWord(at url: URL) -> String? {
     return officeOpenXml.extractText() // Word dosyasından metin çıkarılır.
 }
 func sendImageToAPI(for imageURL: URL, completion: @escaping (Result<String, APIError>) -> Void) {
-    let apiKey = "AIzaSyCBpLh9lSdZnjQzu3RnsUb2-dpPCvnMZH4"
-    let urlString = "https://vision.googleapis.com/v1/images:annotate?key=\(apiKey)"
-    guard let url = URL(string: urlString) else {
+    // Anahtar koddan değil Config.plist'ten okunur ve URL yerine başlıkta (header) gönderilir.
+    let apiKey = APIKey.vision
+    guard let url = URL(string: "https://vision.googleapis.com/v1/images:annotate") else {
         completion(.failure(.requestFailed))
         return
     }
@@ -76,6 +76,7 @@ func sendImageToAPI(for imageURL: URL, completion: @escaping (Result<String, API
     var request = URLRequest(url: url)
     request.httpMethod = "POST"
     request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    request.setValue(apiKey, forHTTPHeaderField: "x-goog-api-key")
 
     do {
         let imageData = try Data(contentsOf: imageURL)

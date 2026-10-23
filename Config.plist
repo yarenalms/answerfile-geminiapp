@@ -3,6 +3,8 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>###</string>
+	<string>_YOUR_GEMINI_API_KEY_</string>
+	<key>VISION_API_KEY</key>
+	<string>_YOUR_GOOGLE_VISION_API_KEY_</string>
 </dict>
 </plist>

@@ -6,7 +6,7 @@
 //
 import Foundation
 
-struct RecipeResponse: Codable {
+struct GeminiResponse: Codable {
     let candidates: [Candidate]
     let usageMetadata: UsageMetadata
 }
@@ -49,9 +49,10 @@ enum APIError: Error {
 }
 
 // API'ye istek gönderme fonksiyonu
-func sendQueryToGeminiAPI(metin: String, soru: String, completion: @escaping (Result<RecipeResponse, APIError>) -> Void) {
-    let apiKey = APIKey.default // API anahtarını al
-    let urlString = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=\(apiKey)" // API URL'si
+func sendQueryToGeminiAPI(metin: String, soru: String, completion: @escaping (Result<GeminiResponse, APIError>) -> Void) {
+    let apiKey = APIKey.gemini // API anahtarını Config.plist'ten al
+    // Anahtar URL'ye eklenmez; aşağıda x-goog-api-key başlığıyla gönderilir.
+    let urlString = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent" // API URL'si
     guard let url = URL(string: urlString) else {
         completion(.failure(.requestFailed)) // Hata ile tamamla
         return
@@ -73,6 +74,7 @@ func sendQueryToGeminiAPI(metin: String, soru: String, completion: @escaping (Re
         var request = URLRequest(url: url)
         request.httpMethod = "POST" // HTTP metodu POST olarak ayarla
         request.setValue("application/json", forHTTPHeaderField: "Content-Type") // İçerik türünü ayarla
+        request.setValue(apiKey, forHTTPHeaderField: "x-goog-api-key") // API anahtarını başlıkta gönder
         request.httpBody = jsonData // İstek gövdesine JSON verisini ekle
         
         // API isteğini başlat
@@ -95,7 +97,7 @@ func sendQueryToGeminiAPI(metin: String, soru: String, completion: @escaping (Re
             // Yanıtı JSON olarak çözümle
             do {
                 let decoder = JSONDecoder()
-                let response = try decoder.decode(RecipeResponse.self, from: data) // JSON yanıtını çözümle
+                let response = try decoder.decode(GeminiResponse.self, from: data) // JSON yanıtını çözümle
                 completion(.success(response)) // Başarı ile tamamla
             } catch {
                 completion(.failure(.jsonSerializationError)) // Hata ile tamamla
